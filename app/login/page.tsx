@@ -75,8 +75,9 @@ export default function LoginPage() {
       </form>
 
       <p className="text-sm text-slate-700">
-        Accès réservé : si vous n’avez pas été invité, vous ne pourrez pas accéder au contenu.
+        Accès réservé : si vous n'avez pas été invité, vous ne pourrez pas accéder au contenu.
       </p>
     </div>
   );
 }
+
