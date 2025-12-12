@@ -1,4 +1,4 @@
-import { createPrompt } from "@/actions/prompts";
+import { createPrompt } from "../../../actions/prompts";
 import { requireMember } from "@/lib/auth/requireMember";
 import { redirect } from "next/navigation";
 

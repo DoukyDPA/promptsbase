@@ -1,6 +1,6 @@
 import { requireMember } from "@/lib/auth/requireMember";
 import { supabaseServer } from "@/lib/supabase/server";
-import { createProposal } from "@/actions/prompts";
+import { createProposal } from "../../../../actions/prompts";
 import { redirect } from "next/navigation";
 
 export default async function ProposePage({ params }: { params: Promise<{ id: string }> }) {

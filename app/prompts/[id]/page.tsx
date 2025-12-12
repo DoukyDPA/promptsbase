@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { supabaseServer } from "@/lib/supabase/server";
 import { requireMember } from "@/lib/auth/requireMember";
-import { mergeProposal } from "@/actions/prompts";
+import { mergeProposal } from "../../../actions/prompts";
 
 export default async function PromptDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { member } = await requireMember();
