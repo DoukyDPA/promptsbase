@@ -3,10 +3,11 @@ import { supabaseServer } from "@/lib/supabase/server";
 import { requireMember } from "@/lib/auth/requireMember";
 import { mergeProposal } from "@/actions/prompts";
 
-export default async function PromptDetailPage({ params }: { params: { id: string } }) {
+export default async function PromptDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { member } = await requireMember();
   const supabase = supabaseServer();
-  const promptId = params.id;
+  const { id } = await params;
+  const promptId = id;
 
   const { data: prompt, error: pErr } = await supabase
     .from("prompts")

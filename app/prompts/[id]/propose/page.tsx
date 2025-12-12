@@ -3,10 +3,11 @@ import { supabaseServer } from "@/lib/supabase/server";
 import { createProposal } from "@/actions/prompts";
 import { redirect } from "next/navigation";
 
-export default async function ProposePage({ params }: { params: { id: string } }) {
+export default async function ProposePage({ params }: { params: Promise<{ id: string }> }) {
   await requireMember();
   const supabase = supabaseServer();
-  const promptId = params.id;
+  const { id } = await params;
+  const promptId = id;
 
   const { data: prompt, error: pErr } = await supabase
     .from("prompts")
