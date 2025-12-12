@@ -3,11 +3,10 @@ import { supabaseServer } from "@/lib/supabase/server";
 import { createProposal } from "../../../../actions/prompts";
 import { redirect } from "next/navigation";
 
-export default async function ProposePage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ProposePage({ params }: { params: { id: string } }) {
   await requireMember();
   const supabase = supabaseServer();
-  const { id } = await params;
-  const promptId = id;
+  const promptId = params.id;
 
   const { data: prompt, error: pErr } = await supabase
     .from("prompts")
@@ -15,17 +14,24 @@ export default async function ProposePage({ params }: { params: Promise<{ id: st
     .eq("id", promptId)
     .single();
   if (pErr) throw pErr;
+  if (!prompt) throw new Error("Prompt introuvable");
+  const promptTitle = prompt.title;
+  const baseVersionId = prompt.current_version_id;
 
   const { data: baseVersion, error: vErr } = await supabase
     .from("prompt_versions")
     .select("id,version_number,content")
-    .eq("id", prompt.current_version_id)
+    .eq("id", baseVersionId)
     .single();
   if (vErr) throw vErr;
+  if (!baseVersion) throw new Error("Version de base introuvable");
+  const baseVersionContent = baseVersion.content;
+  const baseVersionNumber = baseVersion.version_number;
+  const baseVersionIdNonNull = baseVersion.id;
 
   async function onSubmit(formData: FormData) {
     "use server";
-    await createProposal(promptId, baseVersion.id, formData);
+    await createProposal(promptId, baseVersionIdNonNull, formData);
     redirect(`/prompts/${promptId}`);
   }
 
@@ -33,12 +39,12 @@ export default async function ProposePage({ params }: { params: Promise<{ id: st
     <div className="max-w-3xl space-y-4">
       <h1 className="text-2xl font-semibold">Proposer une amélioration</h1>
       <p className="text-sm text-slate-700">
-        Prompt : <span className="font-medium">{prompt.title}</span> (base v{baseVersion.version_number})
+        Prompt : <span className="font-medium">{promptTitle}</span> (base v{baseVersionNumber})
       </p>
 
       <div className="rounded-lg border p-4 space-y-2">
         <div className="text-sm font-medium">Version de base</div>
-        <pre className="whitespace-pre-wrap rounded-md bg-slate-50 p-3 text-sm">{baseVersion.content}</pre>
+        <pre className="whitespace-pre-wrap rounded-md bg-slate-50 p-3 text-sm">{baseVersionContent}</pre>
       </div>
 
       <form action={onSubmit} className="space-y-3 rounded-lg border p-4">
