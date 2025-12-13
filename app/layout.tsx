@@ -11,6 +11,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               Hub de prompts (Missions Locales)
             </Link>
             <nav className="flex gap-3 text-sm">
+              <Link href="/admin" className="underline underline-offset-4">
+                Admin
+              </Link>
               <Link href="/prompts" className="underline underline-offset-4">Prompts</Link>
               <Link href="/logout" className="underline underline-offset-4">Se déconnecter</Link>
             </nav>
